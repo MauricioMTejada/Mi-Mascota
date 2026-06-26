@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Mascota</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <main>
+
+        <h1>Ficha de Mi Mascota</h1>
+
+        <div class="fila">
+            <img class="foto-cuadrada"
+                src="public/fotoprincipal.webp"
+                alt="Duke, el ovejero alemán">
+
+            <div class="col-texto">
+                <h2>¡Hola! Soy Duke</h2>
+                <p><strong>Edad:</strong> 4 años · <strong>Raza:</strong> Ovejero Alemán</p>
+                <p>Soy un perro muy protector, inteligente y cariñoso.</p>
+
+                <a class="btn" href="#tabs">Conóceme mejor</a>
+            </div>
+        </div>
+
+        <div class="fila">
+            <a href="https://www.terranea.es/assets/images/razas/pastor_aleman2.jpg" target="_blank">
+            <img class="foto-cuadrada"
+                src="https://www.terranea.es/assets/images/razas/pastor_aleman2.jpg"
+                alt="Duke jugando"></a>
+
+            <div class="col-texto">
+                <h2>🎾 Mi personalidad</h2>
+
+                <p>Soy muy enérgico, atento y me llevo bien con todos.</p>
+
+                <ul>
+                    <li><strong>Leal:</strong> Cuido a mi familia.</li>
+                    <li><strong>Inteligente:</strong> Aprendo rápido.</li>
+                    <li><strong>Protector:</strong> Siempre estoy pendiente.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fila">
+            <div class="col-mitad">
+                <h3>❤️ Cosas que AMO</h3>
+
+                <ul>
+                    <li>Jugar a la pelota</li>
+                    <li>Salir a correr</li>
+                    <li>Bañarme en la piscina</li>
+                </ul>
+            </div>
+
+            <div class="col-mitad">
+                <h3>❌ Cosas que NO soporto</h3>
+
+                <ul>
+                    <li>La aspiradora</li>
+                    <li>Las tormentas</li>
+                    <li>Que me dejen solo</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tabs-container" id="tabs">
+
+            <h2 class="tabs-title">📋 ¿Quieres saber más sobre Duke?</h2>
+
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="tab1">📖 Sobre Duke</button>
+                <button class="tab-button" data-tab="tab2">📸 Fotos</button>
+                <button class="tab-button" data-tab="tab3">💉 Info médica</button>
+                <button class="tab-button" data-tab="tab4">📍 Ubicación</button>
+            </div>
+
+            <div class="tab-content">
+
+                <div id="tab1" class="tab-pane active">
+
+                    <h3>Un poco más sobre mí</h3>
+
+                    <p>Duke llegó a nuestra familia cuando tenía 2 meses y desde entonces es parte de todo.</p>
+
+                    <figure>
+                        <img src="public/fotoprincipal.webp"
+                            alt="Duke descansando"
+                            style="max-height: 290px; object-fit: contain;">
+
+                        <figcaption>
+                            Duke disfrutando una tarde de descanso.
+                        </figcaption>
+                    </figure>
+
+                </div>
+
+                <div id="tab2" class="tab-pane">
+                    <h3>📸 Galería de fotos</h3>
+
+                    <div class="mini-galeria">
+                        <img src="public/album01.jpg"
+                            alt="Duke 3">
+
+                        <img src="public/album02.jpg"
+                            alt="Duke 4">
+
+                        <img src="public/album03.jpg"
+                            alt="Duke 5">
+
+                        <img src="public/album04.jpeg"
+                            alt="Duke 6">
+
+                        <img src="public/album05.jpg"
+                            alt="Duke 7">
+
+                        <img src="public/album06.jpeg"
+                            alt="Duke 8">
+
+                        <img src="public/album07.jpg"
+                            alt="Duke 9">
+
+                        <img src="public/album08.jpg"
+                            alt="Duke 10">
+
+                        <img src="public/album09.jpg"
+                            alt="Duke 11">
+
+                        <img src="public/album10.jpeg"
+                            alt="Duke 12">
+
+                        <img src="public/album11.jpeg"
+                            alt="Duke 13">
+                    </div>
+                </div>
+
+                <div id="tab3" class="tab-pane">
+
+                    <h3>💉 Historial médico</h3>
+
+                    <table class="medica-tabla">
+                        <tr>
+                            <td class="label">Peso</td>
+                            <td>30 kg</td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Vacunas</td>
+                            <td>Al día</td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Fractura</td>
+                            <td>Tuvo una fractura de la pata delantera izquierda, tratada con inmovilización y rehabilitación. Fecha: Febrero de 2022</td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Enfermedad leve</td>
+                            <td>Tuvo una infección de oído leve que se trató con antibióticos. Fecha: Octubre de 2022</td>
+                        </tr>
+                    </table>
+
+                        </div>
+
+                        <div id="tab4" class="tab-pane">
+
+                            <h3>📍 Ubicación</h3>
+
+                            <div class="mapa-container">
+                                <iframe
+                                    src="https://www.google.com/maps?q=-32.91133205047632,-68.84497146883318&z=15&output=embed"
+                                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            </div>
+
+                        </div>
+
+                        </div>
+
+        </div>
+
+        <section id="cuidados">
+
+            <h2>🦴 Cuidados de Duke</h2>
+
+            <p>
+                Duke necesita ejercicio diario, alimentación balanceada y visitas
+                periódicas al veterinario para mantenerse saludable.
+            </p>
+
+            <p>
+                También disfruta mucho de los paseos al aire libre y de los juegos
+                con pelota en el parque.
+            </p>
+
+            <ol>
+                <li>Salir a caminar.</li>
+                <li>Jugar con la pelota.</li>
+                <li>Descansar y dormir.</li>
+            </ol>
+
+        </section>
+
+        <section id="contacto">
+
+            <h2>📬 Contacto</h2>
+
+            <form action="https://httpbin.org/post" method="POST">
+
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+                <h3>¿Cómo conociste a Duke?</h3>
+
+                <label>
+                    <input type="radio" name="origen" value="redes">
+                    Redes sociales
+                </label>
+
+                <label>
+                    <input type="radio" name="origen" value="amigos">
+                    Recomendación de amigos
+                </label>
+
+                <label>
+                    <input type="radio" name="origen" value="otro">
+                    Otro medio
+                </label>
+
+                <h3>¿Qué te interesa de Duke?</h3>
+
+                <label>
+                    <input type="checkbox" name="interes" value="adopcion">
+                    Adoptarlo
+                </label>
+
+                <label>
+                    <input type="checkbox" name="interes" value="informacion">
+                    Recibir información
+                </label>
+
+                <label>
+                    <input type="checkbox" name="interes" value="visita">
+                    Coordinar una visita
+                </label>
+
+                <button type="submit">Enviar</button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 - Ficha de Duke</p>
+
+        <a href="https://www.iesmb.edu.ar/bel/" target="_blank">
+            IESMB
+        </a>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

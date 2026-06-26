@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Duke - Con mapa y ubicación</title>
+    <style>
+        /* ============================================= */
+        /* 1. ESTILOS GENERALES                          */
+        /* ============================================= */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        main {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            border-bottom: 3px solid #ffb347;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* Estilos para las filas (la estructura que te gustó) */
+        .fila {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 10px;
+            border-left: 5px solid #ffb347;
+        }
+        .foto-cuadrada {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        .col-texto { flex: 1; }
+        .col-mitad { flex: 1; }
+        .col-mitad ul { padding-left: 20px; }
+        .btn {
+            display: inline-block;
+            background: #ffb347;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn:hover { background: #e09d30; }
+
+        /* ============================================= */
+        /* 2. ESTILOS PARA LAS PESTAÑAS                 */
+        /* ============================================= */
+        .tabs-container {
+            margin-top: 40px;
+            border-top: 2px dashed #ddd;
+            padding-top: 20px;
+        }
+
+        .tabs-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 5px;
+            border-bottom: 3px solid #ffb347;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: #e9ecef;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+        }
+
+        .tab-button:hover {
+            background: #dee2e6;
+            color: #333;
+        }
+
+        .tab-button.active {
+            background: #ffb347;
+            color: white;
+            border-bottom: 3px solid #e09d30;
+        }
+
+        .tab-content {
+            background: #fafafa;
+            border: 1px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 25px;
+            min-height: 200px;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Galería de fotos */
+        .mini-galeria {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .mini-galeria img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+        .mini-galeria img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tabla médica */
+        .medica-tabla {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .medica-tabla td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .medica-tabla tr:nth-child(even) {
+            background: #f1f3f5;
+        }
+        .medica-tabla .label {
+            font-weight: bold;
+            width: 40%;
+            color: #2c3e50;
+        }
+
+        /* ============================================= */
+        /* 3. ESTILOS PARA LA NUEVA SECCIÓN UBICACIÓN   */
+        /* ============================================= */
+        .ubicacion-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Contenedor del mapa (responsive) */
+        .mapa-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid #ffb347; /* Marco para resaltar el mapa */
+        }
+        .mapa-container iframe {
+            display: block;
+            width: 100%;
+            height: 350px;
+            border: 0;
+        }
+
+        /* Etiqueta de ejemplo sobre el mapa */
+        .mapa-badge {
+            background: #e53935;
+            color: white;
+            font-weight: bold;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Datos de contacto (dirección y teléfono) */
+        .contacto-card {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 10px;
+            border-left: 6px solid #ffb347;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contacto-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contacto-item .icono {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .contacto-item .info {
+            font-size: 1rem;
+        }
+        .contacto-item .info strong {
+            display: block;
+            color: #2c3e50;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .contacto-item .info span {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        /* Teléfono destacado para emergencias */
+        .telefono-emergencia {
+            background: #ffebee;
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 2px solid #e53935;
+            color: #b71c1c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .telefono-emergencia .icono {
+            margin-right: 8px;
+        }
+
+        /* Formulario */
+        #contacto {
+            margin-top: 40px;
+            border-top: 2px dashed #ddd;
+            padding-top: 20px;
+        }
+        #contacto input, #contacto textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #contacto button {
+            background: #ffb347;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #contacto button:hover { background: #e09d30; }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        footer a { color: #ffb347; text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .fila { flex-direction: column; align-items: flex-start; }
+            .foto-cuadrada { width: 100%; height: auto; aspect-ratio: 1/1; }
+            .tab-buttons { flex-direction: column; }
+            .tab-button { border-radius: 8px; margin-bottom: 2px; }
+            .mini-galeria img { width: 80px; height: 80px; }
+            .contacto-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <h1>🐶 Ficha de Duke</h1>
+
+    <!-- ========================================================= -->
+    <!-- FILA 1: Foto + Texto (Presentación)                        -->
+    <!-- ========================================================= -->
+    <div class="fila">
+        <img class="foto-cuadrada"
+             src="public/fotoprincipal.webp"
+             alt="Duke, ovejero alemán">
+        <div class="col-texto">
+            <h2>¡Hola! Soy Duke</h2>
+            <p><strong>Edad:</strong> 4 años · <strong>Raza:</strong> Ovejero Alemán</p>
+            <p>Soy un perro muy protector, inteligente y cariñoso. Me encanta conocer gente nueva.</p>
+            <a class="btn" href="#tabs">Conóceme mejor</a>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- FILA 2: Foto + Texto (Personalidad)                        -->
+    <!-- ========================================================= -->
+    <div class="fila">
+        <img class="foto-cuadrada"
+             src="public/02.jpg"
+             alt="Duke jugando">
+        <div class="col-texto">
+            <h2>🎾 Mi personalidad</h2>
+            <p>Soy muy enérgico, atento y me llevo bien con niños y otros perros.</p>
+            <ul>
+                <li><strong>Leal:</strong> Siempre cuido a mi familia.</li>
+                <li><strong>Inteligente:</strong> Aprendo trucos rápido.</li>
+                <li><strong>Protector:</strong> Siempre estoy pendiente.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- FILA 3: Texto + Texto (Gustos / No gustos)                 -->
+    <!-- ========================================================= -->
+    <div class="fila">
+        <div class="col-mitad">
+            <h3>❤️ Cosas que AMO</h3>
+            <ul>
+                <li>Jugar a la pelota</li>
+                <li>Salir a correr</li>
+                <li>Bañarme en la piscina</li>
+                <li>Dormir en el sofá</li>
+                <li>Comer zanahorias</li>
+            </ul>
+        </div>
+        <div class="col-mitad">
+            <h3>❌ Cosas que NO soporto</h3>
+            <ul>
+                <li>La aspiradora</li>
+                <li>Que me dejen solo</li>
+                <li>Los baños con agua fría</li>
+                <li>Las tormentas eléctricas</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN DE PESTAÑAS (con la nueva pestaña de ubicación)    -->
+    <!-- ========================================================= -->
+    <div class="tabs-container" id="tabs">
+        <h2 class="tabs-title">📋 ¿Quieres saber más sobre Duke?</h2>
+
+        <!-- Botones de las pestañas -->
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="openTab(event, 'tab1')">📖 Sobre Duke</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">📸 Fotos</button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">💉 Info médica</button>
+            <button class="tab-button" onclick="openTab(event, 'tab4')">📍 Ubicación</button>
+        </div>
+
+        <!-- Contenedor del contenido -->
+        <div class="tab-content">
+            <!-- Pestaña 1: Sobre Duke -->
+            <div id="tab1" class="tab-pane active">
+                <h3>Un poco más sobre mí</h3>
+                <p>Duke llegó a nuestra familia cuando era un cachorro de solo 2 meses. Desde el primer día demostró ser un perro muy especial. Le encanta acompañarme a todas partes y siempre está feliz de verme llegar a casa.</p>
+                <p>Es un perro muy sociable; en el parque siempre corre a saludar a todos los perros y personas. Tiene un carácter muy atento y confiable.</p>
+                <p><strong>Dato curioso:</strong> ¡Duke sabe dar la pata, rodar y hasta "hablar" cuando le pido comida!</p>
+            </div>
+
+            <!-- Pestaña 2: Fotos -->
+            <div id="tab2" class="tab-pane">
+                <h3>📸 Galería de fotos</h3>
+                <div class="mini-galeria">
+                    <img src="public/fotoprincipal.webp" alt="Duke 1">
+                    <img src="public/02.jpg" alt="Duke 2">
+                    <img src="public/fotoprincipal.webp" alt="Duke 3">
+                    <img src="public/02.jpg" alt="Duke 4">
+                    <img src="public/fotoprincipal.webp" alt="Duke 5">
+                </div>
+                <p style="margin-top: 15px;"><small>Haz clic en cualquier foto para verla más grande (funciona en algunos navegadores).</small></p>
+            </div>
+
+            <!-- Pestaña 3: Información médica -->
+            <div id="tab3" class="tab-pane">
+                <h3>💉 Historial médico de Duke</h3>
+                <table class="medica-tabla">
+                    <tr><td class="label">Peso actual</td><td>30 kg</td></tr>
+                    <tr><td class="label">Altura (cruz)</td><td>56 cm</td></tr>
+                    <tr><td class="label">Vacuna antirrábica</td><td>✅ Al día (vence 12/2026)</td></tr>
+                    <tr><td class="label">Vacuna quintuple</td><td>✅ Al día (vence 08/2026)</td></tr>
+                    <tr><td class="label">Desparasitación</td><td>✅ Cada 3 meses (última: 01/2026)</td></tr>
+                    <tr><td class="label">Esterilizado</td><td>✅ Sí (desde 2024)</td></tr>
+                    <tr><td class="label">Alergias</td><td>❌ Ninguna conocida</td></tr>
+                    <tr><td class="label">Enfermedades crónicas</td><td>❌ Ninguna</td></tr>
+                </table>
+                <p style="margin-top: 10px;"><strong>Veterinario de cabecera:</strong> Dr. Martínez - Clínica Animal Feliz.</p>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- PESTAÑA 4: UBICACIÓN (NUEVA)                              -->
+            <!-- ========================================================= -->
+            <div id="tab4" class="tab-pane">
+                <h3>📍 ¿Dónde vive Duke?</h3>
+                <div class="ubicacion-grid">
+
+                    <!-- 1. MAPA DE GOOGLE MAPS (iframe) -->
+                    <div class="mapa-container">
+                        <!--
+                            ⭐ EJEMPLO CON PIN MARCADO ⭐
+                            Este mapa ya tiene un pin rojo pinchado en el Obelisco de Buenos Aires.
+                            Para cambiarlo por tu dirección real, sigue los pasos de abajo.
+                        -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.016713333141!2d-58.3832868!3d-34.603683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacd9f7b8c0b%3A0x7b6b5f6f5e8c5d3f!2sObelisco!5e0!3m2!1ses!2sar!4v1651234567890"
+                            width="100%"
+                            height="350"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <!-- Pequeña etiqueta para que veas que tiene pin -->
+                    <div style="text-align: right; margin-top: -10px; margin-bottom: 10px;">
+                        <span class="mapa-badge">📍 PIN DE EJEMPLO (Obelisco)</span>
+                    </div>
+
+                    <!-- 2. DATOS DE CONTACTO (Dirección y Teléfono) -->
+                    <div class="contacto-card">
+                        <!-- Dirección -->
+                        <div class="contacto-item">
+                            <div class="icono">🏠</div>
+                            <div class="info">
+                                <strong>Dirección</strong>
+                                <span>Avenida 9 de Julio 1234,<br> CABA, Buenos Aires, Argentina</span>
+                            </div>
+                        </div>
+
+                        <!-- Teléfono (destacado para emergencias) -->
+                        <div class="contacto-item">
+                            <div class="icono">📞</div>
+                            <div class="info">
+                                <strong>Teléfono de contacto</strong>
+                                <span class="telefono-emergencia">
+                                    <span class="icono">🆘</span> +54 9 11 5555-1234
+                                </span>
+                                <small style="display: block; color: #e53935; font-weight: bold; margin-top: 5px;">
+                                    ⚠️ ¡LLAMAR SI SE PIERDE! (24/7)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje adicional con instrucciones para cambiar el pin -->
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #1976d2; margin: 0;">
+                        <strong>📌 ¿Cómo cambiar este pin de ejemplo por tu propia dirección?</strong>
+                        <ol style="margin: 8px 0 0 0; padding-left: 20px; color: #333;">
+                            <li>Ve a <strong>Google Maps</strong> y busca la ubicación real de tu mascota (tu casa).</li>
+                            <li>Haz clic en el botón <strong>"Compartir"</strong> (suele estar cerca del nombre del lugar).</li>
+                            <li>Ve a la pestaña <strong>"Insertar un mapa"</strong> y copia todo el código <strong>&lt;iframe&gt;</strong>.</li>
+                            <li>Pega ese código en el lugar donde dice <strong>"EJEMPLO CON PIN MARCADO"</strong> arriba.</li>
+                        </ol>
+                        <p style="margin: 8px 0 0 0; font-size: 0.9rem; color: #555;">
+                            ✅ El nuevo mapa mantendrá el pin exacto donde lo marcaste.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN DE LA PESTAÑA 4 -->
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- FORMULARIO DE CONTACTO                                     -->
+    <!-- ========================================================= -->
+    <section id="contacto">
+        <h2>📬 ¿Quieres saber más o adoptar a Duke?</h2>
+        <form action="https://httpbin.org/post" method="POST">
+            <label for="nombre">Tu nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+
+            <label for="email">Tu email:</label>
+            <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="3" placeholder="Cuéntanos por qué te gusta Duke..." required></textarea>
+
+            <button type="submit">Enviar mensaje</button>
+        </form>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 - Ficha de Duke. Hecho con ❤️ para <a href="https://www.iesmb.edu.ar/bel/" target="_blank">IESMB</a></p>
+</footer>
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT (el mismo de antes)                             -->
+<!-- ========================================================= -->
+<script>
+    function openTab(evt, tabId) {
+        const paneles = document.querySelectorAll('.tab-pane');
+        paneles.forEach(panel => {
+            panel.classList.remove('active');
+        });
+
+        const botones = document.querySelectorAll('.tab-button');
+        botones.forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        const panelActivo = document.getElementById(tabId);
+        if (panelActivo) {
+            panelActivo.classList.add('active');
+        }
+
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add('active');
+        }
+    }
+</script>
+
+</body>
+</html>
