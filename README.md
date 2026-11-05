@@ -10,15 +10,26 @@ Python. Los datos de dueños y mascotas se guardan en MySQL.
 ├── backend/
 │   ├── sql/
 │   │   ├── esquema.sql        # Creación de la base y las tablas
+│   │   ├── migracion_qr_mascotas.sql # Almacenamiento de rutas QR
 │   │   ├── datos_ejemplo.sql  # Dueño, mascota, fotos y eventos de ejemplo
 │   │   └── datos_prueba.sql   # 4 dueños y 6 mascotas ficticias de prueba
 │   ├── .env.example           # Plantilla de configuración de MySQL
 │   ├── requirements.txt
-│   └── server.py              # Servidor y API
+│   ├── server.py              # Punto de entrada Flask
+│   └── ficha_app/
+│       ├── __init__.py        # Fábrica de la aplicación
+│       ├── config.py          # Variables de entorno
+│       ├── database.py        # Conexión a MySQL
+│       ├── repository.py      # Consultas y persistencia
+│       ├── serializers.py     # Conversión de filas a JSON
+│       ├── qr.py              # Generación de códigos QR
+│       └── routes.py          # Rutas web y API
 ├── frontend/
 │   ├── public/
+│   ├── ficha.html
 │   ├── datos.js
 │   ├── index.html
+│   ├── selector-mascotas.js
 │   ├── mascota.html
 │   ├── script.js
 │   └── styles.css
@@ -26,6 +37,10 @@ Python. Los datos de dueños y mascotas se guardan en MySQL.
 ├── README.md
 └── Consignas Primer Examen Parcial.pdf
 ```
+
+El backend está dividido por responsabilidad: `server.py` inicia el servidor,
+`ficha_app/routes.py` declara las rutas y los módulos restantes manejan
+configuración, base de datos, serialización, consultas y QR.
 
 ## Base de datos
 
@@ -64,6 +79,17 @@ Si `mysql` no está en el PATH, usá la ruta completa, por ejemplo:
 & 'C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe' -u root -p --default-character-set=utf8mb4 -e "source backend/sql/esquema.sql"
 ```
 
+Si la base ya existía antes de agregar el almacenamiento de QR, aplicá la
+migración una sola vez desde la raíz del proyecto:
+
+```powershell
+mysql -u root -p --default-character-set=utf8mb4 -e "source backend/sql/migracion_qr_mascotas.sql"
+```
+
+La migración crea `mascota_qr`, donde se guarda la ruta relativa de la ficha
+asociada a cada mascota. El QR se regenera con el host actual al solicitarlo,
+así que no se persiste una IP que pueda cambiar al pasar a otra red.
+
 ## Configuración del backend
 
 Copiá `backend/.env.example` a `backend/.env` y completá la contraseña:
@@ -74,6 +100,7 @@ MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_PASSWORD=tu_contraseña
 MYSQL_DB=ficha_mascotas
+APP_PORT=8000
 ```
 
 El archivo `backend/.env` está excluido de Git.
@@ -85,13 +112,18 @@ pip install -r backend/requirements.txt
 python backend/server.py
 ```
 
-Luego abrir <http://127.0.0.1:8000>.
+Luego abrir <http://127.0.0.1:8000> para ver el selector de mascotas.
 
 Para usar otro puerto:
 
 ```powershell
 python backend/server.py --puerto 8080
 ```
+
+También se puede establecer el puerto predeterminado con `APP_PORT` en
+`backend/.env`. El servidor Flask de desarrollo escucha por defecto en
+`0.0.0.0`, por lo que también acepta conexiones desde otros dispositivos de la
+red local.
 
 ## Instalación en otra PC
 
@@ -142,6 +174,7 @@ MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_PASSWORD=la_contraseña_de_esa_pc
 MYSQL_DB=ficha_mascotas
+APP_PORT=8000
 ```
 
 5. Iniciar el servidor:
@@ -150,7 +183,7 @@ MYSQL_DB=ficha_mascotas
 python backend/server.py
 ```
 
-6. Abrir <http://127.0.0.1:8000/?id=1> en esa PC.
+6. Abrir <http://127.0.0.1:8000> en esa PC para ver el selector de mascotas.
 
 `backend/.env` está excluido de Git, así que no se copia con el repositorio:
 hay que crearlo en cada PC. La contraseña de MySQL puede ser distinta en cada
@@ -164,8 +197,8 @@ En macOS o Linux los comandos son los mismos, reemplazando `python` por
 La base y el servidor quedan en la PC original; la otra solo abre el
 navegador.
 
-1. En la PC que tiene el proyecto, iniciar el servidor aceptando conexiones de
-   la red (no solo locales):
+1. En la PC que tiene el proyecto, iniciar el servidor. Por defecto acepta
+   conexiones de la red local; también se puede indicar el host explícitamente:
 
 ```powershell
 python backend/server.py --host 0.0.0.0
@@ -205,25 +238,28 @@ PC únicamente usa el navegador.
 
 ## Ver una mascota
 
-La página principal carga la ficha desde la base según el ID de la mascota:
+La página principal muestra las mascotas disponibles en un selector. Al elegir
+una, aparece un QR que abre su ficha en el mismo servidor. La ficha individual
+también muestra un QR para abrir esa misma ficha y se puede abrir directamente
+según su ID:
 
 ```text
-http://127.0.0.1:8000/?id=3
+http://127.0.0.1:8000/ficha.html?id=3
 ```
 
 Ese ejemplo muestra a **Rocky** (ID 3). Si no se indica `id`, se muestra la
-mascota 1 (Duke). Para ver otra mascota, cambiá el ID en la barra de
-direcciones:
+mascota 1 (Duke). Las URLs anteriores `/?id=<id>` siguen redirigiendo a la
+ficha correspondiente. Para ver otra mascota, cambiá el ID:
 
 | URL | Mascota |
 |---|---|
-| `/?id=1` | Duke |
-| `/?id=2` | Luna |
-| `/?id=3` | Rocky |
-| `/?id=4` | Milo |
-| `/?id=5` | Nina |
-| `/?id=6` | Simba |
-| `/?id=7` | Coco |
+| `/ficha.html?id=1` | Duke |
+| `/ficha.html?id=2` | Luna |
+| `/ficha.html?id=3` | Rocky |
+| `/ficha.html?id=4` | Milo |
+| `/ficha.html?id=5` | Nina |
+| `/ficha.html?id=6` | Simba |
+| `/ficha.html?id=7` | Coco |
 
 Si el ID no existe, la página muestra un mensaje de error.
 
@@ -240,3 +276,4 @@ Si el ID no existe, la página muestra un mensaje de error.
 | `/api/mascotas?dueno_id=<id>` | Mascotas filtradas por dueño |
 | `/api/mascotas/<id>` | Mascota con dueño, fotos y eventos médicos |
 | `/api/qr?dueno_id=<id>` | QR en SVG con los datos del dueño |
+| `/api/qr/mascota/<id>` | QR en SVG con la URL de la ficha de la mascota |

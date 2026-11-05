@@ -1,5 +1,5 @@
 // Carga una mascota desde la API y completa la ficha.
-// Uso: /?id=3 (si no se indica un ID, muestra la mascota 1).
+// Uso: /ficha.html?id=3 (si no se indica un ID, muestra la mascota 1).
 // Si la página se abre como archivo (file://), conserva los datos del HTML.
 (async function () {
     const params = new URLSearchParams(window.location.search);
@@ -60,10 +60,6 @@
             });
         });
 
-        const qr = document.getElementById("qr-imagen");
-        if (qr && dueno.id) {
-            qr.src = `api/qr?dueno_id=${dueno.id}`;
-        }
     }
 
     function llenarMascota(mascota, dueno) {
@@ -72,6 +68,7 @@
 
         document.title = `Ficha de ${nombre}`;
         setTexto("titulo-pagina", `Ficha de ${nombre}`);
+        setTexto("qr-mascota-nombre", nombre);
         setTexto("nombre-mascota", `¡Hola! Soy ${nombre}`);
         setTexto("edad-mascota", mascota.edad || "—");
         setTexto("raza-mascota", mascota.raza || "—");
@@ -88,6 +85,26 @@
         if (foto) {
             foto.src = fotoPrincipal;
             foto.alt = `${nombre} (${mascota.especie || "mascota"})`;
+        }
+
+        const qr = document.getElementById("qr-imagen");
+        const qrEstado = document.getElementById("qr-estado");
+        const enlaceQr = document.getElementById("qr-ficha-enlace");
+        if (qr && qrEstado && enlaceQr) {
+            const urlFicha = new URL(window.location.href);
+            urlFicha.searchParams.set("id", mascota.id);
+            enlaceQr.href = urlFicha.href;
+            enlaceQr.textContent = urlFicha.href;
+            enlaceQr.hidden = false;
+            qr.addEventListener("load", () => {
+                qr.hidden = false;
+                qrEstado.hidden = true;
+            }, { once: true });
+            qr.addEventListener("error", () => {
+                qrEstado.textContent = "No se pudo generar el QR. Verifica la conexión con el servidor y la base de datos.";
+                enlaceQr.hidden = true;
+            }, { once: true });
+            qr.src = `api/qr/mascota/${encodeURIComponent(mascota.id)}`;
         }
 
         const fotos = Array.isArray(mascota.fotos) ? mascota.fotos : [];

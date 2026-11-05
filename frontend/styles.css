@@ -15,6 +15,40 @@ h1 {
     text-align: center;
     color: #333;
 }
+.selector-mascota {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 360px;
+    margin: 0 auto 25px;
+}
+.selector-mascota label {
+    font-weight: bold;
+    color: #333;
+}
+.selector-mascota select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+}
+.qr-mascota {
+    margin: 0 auto;
+    text-align: center;
+}
+.qr-mascota h2 {
+    color: #333;
+}
+.qr-mascota img {
+    display: block;
+    width: min(280px, 100%);
+    margin: 16px auto;
+}
+.qr-mascota-enlace {
+    display: block;
+    overflow-wrap: anywhere;
+}
 .fila {
     display: flex;
     gap: 20px;
@@ -243,6 +277,9 @@ a.dato-valor:hover {
     display: block;
     width: 200px;
     height: 200px;
+}
+.qr-imagen img[hidden] {
+    display: none;
 }
 
 .qr-datos {
