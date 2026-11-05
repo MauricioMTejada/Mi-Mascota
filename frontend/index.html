@@ -12,32 +12,160 @@
 
     <main>
 
-        <h1>Ficha de Mi Mascota</h1>
+        <h1 id="titulo-pagina">Ficha de Mi Mascota</h1>
+
+        <div id="mensaje-error" class="mensaje-error" hidden></div>
+
+        <section class="dueno-card" aria-labelledby="dueno-titulo">
+            <img id="foto-dueno" class="foto-cuadrada"
+                src="public/dueno.svg"
+                alt="Foto del dueño">
+
+            <div class="col-texto">
+                <h2 id="dueno-titulo">👤 Datos del dueño</h2>
+                <p class="dueno-nombre" data-campo="nombre">Pablo Herrera</p>
+
+                <ul class="dueno-datos">
+                    <li>
+                        <span class="dato-etiqueta">📱 WhatsApp</span>
+                        <a class="dato-valor" data-campo="whatsapp" href="https://wa.me/5491100000000" target="_blank" rel="noopener">
+                            +54 9 11 0000-0000
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">✈️ Telegram</span>
+                        <a class="dato-valor" data-campo="telegram" href="https://t.me/usuario" target="_blank" rel="noopener">
+                            @usuario
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">📘 Facebook</span>
+                        <a class="dato-valor" data-campo="facebook" href="https://www.facebook.com/usuario" target="_blank" rel="noopener">
+                            /usuario
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">📸 Instagram</span>
+                        <a class="dato-valor" data-campo="instagram" href="https://www.instagram.com/usuario" target="_blank" rel="noopener">
+                            @usuario
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">🎵 TikTok</span>
+                        <a class="dato-valor" data-campo="tiktok" href="https://www.tiktok.com/@usuario" target="_blank" rel="noopener">
+                            @usuario
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">✉️ Email</span>
+                        <a class="dato-valor" data-campo="email" href="mailto:correo@ejemplo.com">
+                            correo@ejemplo.com
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="dato-etiqueta">🏠 Dirección</span>
+                        <span class="dato-valor" data-campo="direccion">Calle 123, Ciudad</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="qr-card" aria-labelledby="qr-titulo">
+            <h2 id="qr-titulo">📲 QR</h2>
+
+            <div class="qr-contenido">
+                <div class="qr-imagen">
+                    <img id="qr-imagen"
+                        src="public/qr-generico.svg"
+                        alt="Código QR de ejemplo con los datos de contacto del dueño">
+                </div>
+
+                <div class="qr-datos">
+                    <h3>Datos codificados</h3>
+
+                    <ul class="qr-lista">
+                        <li>
+                            <span class="dato-etiqueta">👤 Nombre</span>
+                            <span class="dato-valor" data-campo="nombre">Pablo Herrera</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">📱 WhatsApp</span>
+                            <span class="dato-valor" data-campo="whatsapp">+54 9 11 0000-0000</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">✈️ Telegram</span>
+                            <span class="dato-valor" data-campo="telegram">@usuario</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">📘 Facebook</span>
+                            <span class="dato-valor" data-campo="facebook">/usuario</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">📸 Instagram</span>
+                            <span class="dato-valor" data-campo="instagram">@usuario</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">🎵 TikTok</span>
+                            <span class="dato-valor" data-campo="tiktok">@usuario</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">✉️ Email</span>
+                            <span class="dato-valor" data-campo="email">correo@ejemplo.com</span>
+                        </li>
+
+                        <li>
+                            <span class="dato-etiqueta">🏠 Dirección</span>
+                            <span class="dato-valor" data-campo="direccion">Calle 123, Ciudad</span>
+                        </li>
+                    </ul>
+
+                    <p class="qr-nota">
+                        QR generado por el servidor a partir de los datos del dueño.
+                    </p>
+                </div>
+            </div>
+        </section>
 
         <div class="fila">
-            <img class="foto-cuadrada"
+            <img id="foto-mascota" class="foto-cuadrada"
                 src="public/fotoprincipal.webp"
                 alt="Duke, el ovejero alemán">
 
             <div class="col-texto">
-                <h2>¡Hola! Soy Duke</h2>
-                <p><strong>Edad:</strong> 4 años · <strong>Raza:</strong> Ovejero Alemán</p>
-                <p>Soy un perro muy protector, inteligente y cariñoso.</p>
+                <h2 id="nombre-mascota">¡Hola! Soy Duke</h2>
+                <p>
+                    <strong>Edad:</strong> <span id="edad-mascota">4 años</span> ·
+                    <strong>Raza:</strong> <span id="raza-mascota">Ovejero Alemán</span> ·
+                    <strong>Especie:</strong> <span id="especie-mascota">Perro</span>
+                </p>
+                <p id="descripcion-mascota">Soy un perro muy protector, inteligente y cariñoso.</p>
 
                 <a class="btn" href="#tabs">Conóceme mejor</a>
             </div>
         </div>
 
         <div class="fila">
-            <a href="https://www.terranea.es/assets/images/razas/pastor_aleman2.jpg" target="_blank">
-            <img class="foto-cuadrada"
+            <a id="enlace-foto-personalidad" href="https://www.terranea.es/assets/images/razas/pastor_aleman2.jpg" target="_blank">
+            <img id="foto-personalidad" class="foto-cuadrada"
                 src="https://www.terranea.es/assets/images/razas/pastor_aleman2.jpg"
                 alt="Duke jugando"></a>
 
             <div class="col-texto">
                 <h2>🎾 Mi personalidad</h2>
 
-                <p>Soy muy enérgico, atento y me llevo bien con todos.</p>
+                <p id="personalidad-mascota">Soy muy enérgico, atento y me llevo bien con todos.</p>
 
                 <ul>
                     <li><strong>Leal:</strong> Cuido a mi familia.</li>
@@ -71,10 +199,10 @@
 
         <div class="tabs-container" id="tabs">
 
-            <h2 class="tabs-title">📋 ¿Quieres saber más sobre Duke?</h2>
+            <h2 class="tabs-title" id="tabs-titulo">📋 ¿Quieres saber más sobre Duke?</h2>
 
             <div class="tab-buttons">
-                <button class="tab-button active" data-tab="tab1">📖 Sobre Duke</button>
+                <button class="tab-button active" data-tab="tab1">📖 Sobre <span data-nombre-mascota>Duke</span></button>
                 <button class="tab-button" data-tab="tab2">📸 Fotos</button>
                 <button class="tab-button" data-tab="tab3">💉 Info médica</button>
                 <button class="tab-button" data-tab="tab4">📍 Ubicación</button>
@@ -86,14 +214,14 @@
 
                     <h3>Un poco más sobre mí</h3>
 
-                    <p>Duke llegó a nuestra familia cuando tenía 2 meses y desde entonces es parte de todo.</p>
+                    <p id="historia-mascota">Duke llegó a nuestra familia cuando tenía 2 meses y desde entonces es parte de todo.</p>
 
                     <figure>
-                        <img src="public/fotoprincipal.webp"
+                        <img id="foto-historia" src="public/fotoprincipal.webp"
                             alt="Duke descansando"
                             style="max-height: 290px; object-fit: contain;">
 
-                        <figcaption>
+                        <figcaption id="leyenda-historia">
                             Duke disfrutando una tarde de descanso.
                         </figcaption>
                     </figure>
@@ -103,7 +231,7 @@
                 <div id="tab2" class="tab-pane">
                     <h3>📸 Galería de fotos</h3>
 
-                    <div class="mini-galeria">
+                    <div class="mini-galeria" id="galeria-mascota">
                         <img src="public/album01.jpg"
                             alt="Duke 3">
 
@@ -143,7 +271,7 @@
 
                     <h3>💉 Historial médico</h3>
 
-                    <table class="medica-tabla">
+                    <table class="medica-tabla" id="tabla-medica">
                         <tr>
                             <td class="label">Peso</td>
                             <td>30 kg</td>
@@ -173,6 +301,7 @@
 
                             <div class="mapa-container">
                                 <iframe
+                                    id="mapa-dueno"
                                     src="https://www.google.com/maps?q=-32.91133205047632,-68.84497146883318&z=15&output=embed"
                                     width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                                     referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -186,10 +315,10 @@
 
         <section id="cuidados">
 
-            <h2>🦴 Cuidados de Duke</h2>
+            <h2>🦴 Cuidados de <span data-nombre-mascota>Duke</span></h2>
 
             <p>
-                Duke necesita ejercicio diario, alimentación balanceada y visitas
+                <span data-nombre-mascota>Duke</span> necesita ejercicio diario, alimentación balanceada y visitas
                 periódicas al veterinario para mantenerse saludable.
             </p>
 
@@ -221,7 +350,7 @@
                 <label for="mensaje">Mensaje:</label>
                 <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
 
-                <h3>¿Cómo conociste a Duke?</h3>
+                <h3>¿Cómo conociste a <span data-nombre-mascota>Duke</span>?</h3>
 
                 <label>
                     <input type="radio" name="origen" value="redes">
@@ -238,7 +367,7 @@
                     Otro medio
                 </label>
 
-                <h3>¿Qué te interesa de Duke?</h3>
+                <h3>¿Qué te interesa de <span data-nombre-mascota>Duke</span>?</h3>
 
                 <label>
                     <input type="checkbox" name="interes" value="adopcion">
@@ -264,7 +393,7 @@
     </main>
 
     <footer>
-        <p>© 2026 - Ficha de Duke</p>
+        <p>© 2026 - Ficha de <span data-nombre-mascota>Duke</span></p>
 
         <a href="https://www.iesmb.edu.ar/bel/" target="_blank">
             IESMB
@@ -272,6 +401,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="datos.js"></script>
 
 </body>
 
